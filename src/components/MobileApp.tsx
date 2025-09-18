@@ -605,14 +605,6 @@ function MobileApp() {
                     rows={4}
                     maxLength={500}
                   />
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-xs text-foreground-secondary">
-                      Tell your story in up to 500 characters
-                    </span>
-                    <button className="text-xs text-primary hover:text-primary-dark font-medium transition-colors duration-200">
-                      Save Story
-                    </button>
-                  </div>
                 </div>
 
                 {/* Additional Profile Fields */}
