@@ -736,16 +736,6 @@ function MobileApp() {
                     />
                   </div>
                 </div>
-                
-                {/* Upload Guidelines */}
-                <div className="mt-6 p-4 bg-muted rounded-xl">
-                  <h4 className="font-semibold text-foreground mb-2">Upload Guidelines</h4>
-                  <ul className="text-sm text-foreground-secondary space-y-1">
-                    <li>• Profile images should be square (1:1 ratio) for best results</li>
-                    <li>• Videos should be under 30 seconds and less than 50MB</li>
-                    <li>• Supported formats: JPG, PNG for images | MP4, MOV for videos</li>
-                  </ul>
-                </div>
               </div>
             </div>
           )}
