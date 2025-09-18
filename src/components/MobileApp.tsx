@@ -614,6 +614,82 @@ function MobileApp() {
                     </button>
                   </div>
                 </div>
+
+                {/* Additional Profile Fields */}
+                <div className="mt-6 space-y-6 text-left">
+                  {/* Company Name Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-3">
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter your company or startup name"
+                      className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+                    />
+                  </div>
+
+                  {/* Location Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-3">
+                      Location
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="City, State/Country"
+                      className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+                    />
+                  </div>
+
+                  {/* Industry Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-3">
+                      Industry
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g., FinTech, HealthTech, AI/ML, E-commerce"
+                      className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+                    />
+                  </div>
+
+                  {/* Goals Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-3">
+                      My Goals
+                    </label>
+                    <textarea
+                      placeholder="What are your current goals and what do you hope to achieve?"
+                      className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
+                      rows={3}
+                      maxLength={300}
+                    />
+                    <span className="text-xs text-foreground-secondary mt-1 block">
+                      Up to 300 characters
+                    </span>
+                  </div>
+
+                  {/* Favorite Startup Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-3">
+                      One of my favorite startups and why
+                    </label>
+                    <textarea
+                      placeholder="Share a startup you admire and what inspires you about them"
+                      className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
+                      rows={3}
+                      maxLength={300}
+                    />
+                    <span className="text-xs text-foreground-secondary mt-1 block">
+                      Up to 300 characters
+                    </span>
+                  </div>
+
+                  {/* Save Button */}
+                  <button className="w-full bg-gradient-primary text-white py-4 rounded-xl font-semibold hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 button-hover-scale">
+                    Save Profile
+                  </button>
+                </div>
               </div>
 
               {/* Upload Options */}
