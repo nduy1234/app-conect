@@ -593,6 +593,27 @@ function MobileApp() {
                 <h2 className="text-2xl font-bold gradient-text mb-2">
                   {user?.name || 'Your Profile'}
                 </h2>
+                
+                {/* My Startup Story Field */}
+                <div className="mt-6 text-left">
+                  <label className="block text-sm font-semibold text-foreground mb-3">
+                    My Startup Story
+                  </label>
+                  <textarea
+                    placeholder="Share your entrepreneurial journey, what inspired you to start, and what drives you forward..."
+                    className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
+                    rows={4}
+                    maxLength={500}
+                  />
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-xs text-foreground-secondary">
+                      Tell your story in up to 500 characters
+                    </span>
+                    <button className="text-xs text-primary hover:text-primary-dark font-medium transition-colors duration-200">
+                      Save Story
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Upload Options */}
