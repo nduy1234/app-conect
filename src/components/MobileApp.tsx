@@ -592,8 +592,19 @@ function MobileApp() {
           {activeTab === 'profile' && (
             <div className="p-6 space-y-6">
               <div className="glass-effect rounded-2xl p-8 shadow-xl text-center">
-                <div className="w-24 h-24 bg-gradient-primary rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-glow">
-                  <User className="w-12 h-12 text-white" />
+                {/* Profile Image Preview */}
+                <div className="relative mx-auto mb-6">
+                  {selectedImage ? (
+                    <img 
+                      src={URL.createObjectURL(selectedImage)} 
+                      alt="Profile Preview"
+                      className="w-24 h-24 rounded-3xl object-cover shadow-glow border-2 border-primary/20"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 bg-gradient-primary rounded-3xl flex items-center justify-center shadow-glow">
+                      <User className="w-12 h-12 text-white" />
+                    </div>
+                  )}
                 </div>
                 <h2 className="text-2xl font-bold gradient-text mb-2">
                   {user?.name || 'Your Profile'}
