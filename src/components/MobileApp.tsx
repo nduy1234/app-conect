@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Home, 
   User, 
@@ -48,6 +48,11 @@ function MobileApp() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<UserData | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<WelcomeOption[]>([]);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
+  
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -685,49 +690,67 @@ function MobileApp() {
                 <h3 className="text-xl font-bold text-foreground mb-6">Upload Content</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Profile Image Upload */}
-                  <div className="p-6 border-2 border-dashed border-border rounded-xl hover:border-info hover:bg-info/5 transition-all duration-200 cursor-pointer group">
+                  <div 
+                    className="p-6 border-2 border-dashed border-border rounded-xl hover:border-info hover:bg-info/5 transition-all duration-200 cursor-pointer group"
+                    onClick={() => imageInputRef.current?.click()}
+                  >
                     <div className="text-center">
                       <div className="w-16 h-16 bg-gradient-info rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-info group-hover:scale-110 transition-transform duration-200">
                         <Camera className="w-8 h-8 text-white" />
                       </div>
                       <h4 className="text-lg font-semibold text-foreground mb-2">Profile Image</h4>
-                      <p className="text-foreground-secondary text-sm mb-4">Upload a profile picture to personalize your account</p>
+                      <p className="text-foreground-secondary text-sm mb-4">
+                        {selectedImage ? `Selected: ${selectedImage.name}` : "Upload a profile picture to personalize your account"}
+                      </p>
                       <div className="flex items-center justify-center space-x-2 text-info font-medium">
                         <Upload className="w-4 h-4" />
-                        <span>Choose Image</span>
+                        <span>{selectedImage ? 'Change Image' : 'Choose Image'}</span>
                       </div>
                     </div>
                     <input
+                      ref={imageInputRef}
                       type="file"
                       accept="image/*"
                       className="hidden"
                       onChange={(e) => {
-                        // Handle image upload
-                        console.log('Image selected:', e.target.files?.[0]);
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSelectedImage(file);
+                          console.log('Image selected:', file);
+                        }
                       }}
                     />
                   </div>
 
                   {/* Short Video Upload */}
-                  <div className="p-6 border-2 border-dashed border-border rounded-xl hover:border-secondary hover:bg-secondary/5 transition-all duration-200 cursor-pointer group">
+                  <div 
+                    className="p-6 border-2 border-dashed border-border rounded-xl hover:border-secondary hover:bg-secondary/5 transition-all duration-200 cursor-pointer group"
+                    onClick={() => videoInputRef.current?.click()}
+                  >
                     <div className="text-center">
                       <div className="w-16 h-16 bg-gradient-to-r from-secondary to-secondary-dark rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-secondary/30 group-hover:scale-110 transition-transform duration-200">
                         <Video className="w-8 h-8 text-white" />
                       </div>
                       <h4 className="text-lg font-semibold text-foreground mb-2">Short Video</h4>
-                      <p className="text-foreground-secondary text-sm mb-4">Share a short video introduction about yourself</p>
+                      <p className="text-foreground-secondary text-sm mb-4">
+                        {selectedVideo ? `Selected: ${selectedVideo.name}` : "Share a short video introduction about yourself"}
+                      </p>
                       <div className="flex items-center justify-center space-x-2 text-secondary font-medium">
                         <Upload className="w-4 h-4" />
-                        <span>Choose Video</span>
+                        <span>{selectedVideo ? 'Change Video' : 'Choose Video'}</span>
                       </div>
                     </div>
                     <input
+                      ref={videoInputRef}
                       type="file"
                       accept="video/*"
                       className="hidden"
                       onChange={(e) => {
-                        // Handle video upload
-                        console.log('Video selected:', e.target.files?.[0]);
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setSelectedVideo(file);
+                          console.log('Video selected:', file);
+                        }
                       }}
                     />
                   </div>
