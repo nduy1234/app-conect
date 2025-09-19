@@ -593,7 +593,7 @@ function MobileApp() {
             <div className="p-6 space-y-6">
               <div className="glass-effect rounded-2xl p-8 shadow-xl text-center">
                 {/* Profile Image Preview */}
-                <div className="relative mx-auto mb-6">
+                <div className="flex justify-center mb-6">
                   {selectedImage ? (
                     <img 
                       src={URL.createObjectURL(selectedImage)} 
