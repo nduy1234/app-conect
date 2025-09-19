@@ -677,10 +677,6 @@ function MobileApp() {
                     </span>
                   </div>
 
-                  {/* Save Button */}
-                  <button className="w-full bg-gradient-primary text-white py-4 rounded-xl font-semibold hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 button-hover-scale">
-                    Save Profile
-                  </button>
                 </div>
               </div>
 
@@ -737,6 +733,11 @@ function MobileApp() {
                   </div>
                 </div>
               </div>
+
+              {/* Save Profile Button */}
+              <button className="w-full bg-gradient-primary text-white py-4 rounded-xl font-semibold hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 button-hover-scale">
+                Save Profile
+              </button>
             </div>
           )}
 
