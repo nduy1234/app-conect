@@ -36,6 +36,15 @@ interface FormData {
   resetEmail: string;
 }
 
+interface ProfileData {
+  startupStory: string;
+  companyName: string;
+  location: string;
+  industry: string;
+  goals: string;
+  favoriteStartup: string;
+}
+
 type Screen = 'signin' | 'forgot-password' | 'reset-success' | 'welcome' | 'main';
 type Tab = 'home' | 'profile' | 'resource' | 'message' | 'startups';
 type WelcomeOption = 'network' | 'collaborate' | 'explore';
@@ -50,6 +59,15 @@ function MobileApp() {
   const [selectedOptions, setSelectedOptions] = useState<WelcomeOption[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [profileData, setProfileData] = useState<ProfileData>({
+    startupStory: '',
+    companyName: '',
+    location: '',
+    industry: '',
+    goals: '',
+    favoriteStartup: ''
+  });
   
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +77,10 @@ function MobileApp() {
     name: '',
     resetEmail: ''
   });
+
+  const handleProfileChange = (field: keyof ProfileData, value: string) => {
+    setProfileData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -108,6 +130,17 @@ function MobileApp() {
         ? prev.filter(item => item !== option)
         : [...prev, option]
     );
+  };
+
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      // Show success notification
+      console.log('Profile saved:', profileData);
+      setIsSaving(false);
+    }, 1500);
   };
 
   const handleWelcomeNext = () => {
@@ -616,6 +649,8 @@ function MobileApp() {
                     My Startup Story
                   </label>
                   <textarea
+                    value={profileData.startupStory}
+                    onChange={(e) => handleProfileChange('startupStory', e.target.value)}
                     placeholder="Share your entrepreneurial journey, what inspired you to start, and what drives you forward..."
                     className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
                     rows={4}
@@ -632,6 +667,8 @@ function MobileApp() {
                     </label>
                     <input
                       type="text"
+                      value={profileData.companyName}
+                      onChange={(e) => handleProfileChange('companyName', e.target.value)}
                       placeholder="Enter your company or startup name"
                       className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                     />
@@ -644,6 +681,8 @@ function MobileApp() {
                     </label>
                     <input
                       type="text"
+                      value={profileData.location}
+                      onChange={(e) => handleProfileChange('location', e.target.value)}
                       placeholder="City, State/Country"
                       className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                     />
@@ -656,6 +695,8 @@ function MobileApp() {
                     </label>
                     <input
                       type="text"
+                      value={profileData.industry}
+                      onChange={(e) => handleProfileChange('industry', e.target.value)}
                       placeholder="e.g., FinTech, HealthTech, AI/ML, E-commerce"
                       className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                     />
@@ -667,6 +708,8 @@ function MobileApp() {
                       My Goals
                     </label>
                     <textarea
+                      value={profileData.goals}
+                      onChange={(e) => handleProfileChange('goals', e.target.value)}
                       placeholder="What are your current goals and what do you hope to achieve?"
                       className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
                       rows={3}
@@ -683,6 +726,8 @@ function MobileApp() {
                       One of my favorite startups and why
                     </label>
                     <textarea
+                      value={profileData.favoriteStartup}
+                      onChange={(e) => handleProfileChange('favoriteStartup', e.target.value)}
                       placeholder="Share a startup you admire and what inspires you about them"
                       className="w-full bg-background/50 border border-border rounded-xl p-4 text-foreground placeholder:text-foreground-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
                       rows={3}
@@ -769,8 +814,19 @@ function MobileApp() {
               </div>
 
               {/* Save Profile Button */}
-              <button className="w-full bg-gradient-primary text-white py-4 rounded-xl font-semibold hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 button-hover-scale">
-                Save Profile
+              <button 
+                onClick={handleSaveProfile}
+                disabled={isSaving}
+                className="w-full bg-gradient-primary text-white py-4 rounded-xl font-semibold hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 button-hover-scale disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isSaving ? (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    Saving Profile...
+                  </div>
+                ) : (
+                  'Save Profile'
+                )}
               </button>
             </div>
           )}
