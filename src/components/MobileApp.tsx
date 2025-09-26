@@ -44,6 +44,9 @@ function MobileApp() {
   const [showPrivacySettings, setShowPrivacySettings] = useState(false);
   const [profileVisibility, setProfileVisibility] = useState<'public' | 'private'>('public');
   const [messagingPrivacy, setMessagingPrivacy] = useState<'anyone' | 'favorites'>('anyone');
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  const [messageNotifications, setMessageNotifications] = useState(true);
+  const [favoritesNotifications, setFavoritesNotifications] = useState(true);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -410,7 +413,7 @@ function MobileApp() {
                       <span className="font-semibold text-foreground">Privacy Settings</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-4 glass-effect rounded-xl hover:bg-accent transition-all duration-200 cursor-pointer card-hover">
+                  <div onClick={() => setShowNotificationSettings(true)} className="flex items-center justify-between p-4 glass-effect rounded-xl hover:bg-accent transition-all duration-200 cursor-pointer card-hover">
                     <div className="flex items-center space-x-4">
                       <div className="w-10 h-10 bg-gradient-warning rounded-xl flex items-center justify-center shadow-warning">
                         <Bell className="w-5 h-5 text-white" />
@@ -682,6 +685,67 @@ function MobileApp() {
                       Delete Account
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Notification Settings Modal */}
+        {showNotificationSettings && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+            <div className="w-full max-w-md glass-effect rounded-2xl p-6 shadow-xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-foreground">Notification Preferences</h2>
+                <button 
+                  onClick={() => setShowNotificationSettings(false)}
+                  className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-accent transition-colors"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="flex items-center justify-between p-4 glass-effect rounded-xl">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground mb-1">Message Notifications</h3>
+                    <p className="text-sm text-foreground-secondary">Toggle push/email alerts when someone sends you a message</p>
+                  </div>
+                  <button
+                    onClick={() => setMessageNotifications(!messageNotifications)}
+                    className={`w-12 h-6 rounded-full transition-all duration-200 ${
+                      messageNotifications 
+                        ? 'bg-primary shadow-glow' 
+                        : 'bg-muted'
+                    }`}
+                  >
+                    <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-200 ${
+                      messageNotifications 
+                        ? 'translate-x-6' 
+                        : 'translate-x-0.5'
+                    }`} />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between p-4 glass-effect rounded-xl">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground mb-1">Favorites & Activity Notifications</h3>
+                    <p className="text-sm text-foreground-secondary">Control alerts when someone saves you as a favorite</p>
+                  </div>
+                  <button
+                    onClick={() => setFavoritesNotifications(!favoritesNotifications)}
+                    className={`w-12 h-6 rounded-full transition-all duration-200 ${
+                      favoritesNotifications 
+                        ? 'bg-primary shadow-glow' 
+                        : 'bg-muted'
+                    }`}
+                  >
+                    <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-200 ${
+                      favoritesNotifications 
+                        ? 'translate-x-6' 
+                        : 'translate-x-0.5'
+                    }`} />
+                  </button>
                 </div>
               </div>
             </div>
