@@ -43,6 +43,7 @@ function MobileApp() {
   });
   const [showPrivacySettings, setShowPrivacySettings] = useState(false);
   const [profileVisibility, setProfileVisibility] = useState<'public' | 'private'>('public');
+  const [messagingPrivacy, setMessagingPrivacy] = useState<'anyone' | 'favorites'>('anyone');
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -635,6 +636,35 @@ function MobileApp() {
                     </button>
                     <span className={`text-sm font-medium ${profileVisibility === 'private' ? 'text-primary' : 'text-foreground-muted'}`}>
                       Private
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between p-4 glass-effect rounded-xl">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground mb-1">Messaging Privacy</h3>
+                    <p className="text-sm text-foreground-secondary">Who can send you messages</p>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span className={`text-sm font-medium ${messagingPrivacy === 'anyone' ? 'text-primary' : 'text-foreground-muted'}`}>
+                      Anyone
+                    </span>
+                    <button
+                      onClick={() => setMessagingPrivacy(messagingPrivacy === 'anyone' ? 'favorites' : 'anyone')}
+                      className={`w-12 h-6 rounded-full transition-all duration-200 ${
+                        messagingPrivacy === 'anyone' 
+                          ? 'bg-primary shadow-glow' 
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-200 ${
+                        messagingPrivacy === 'anyone' 
+                          ? 'translate-x-6' 
+                          : 'translate-x-0.5'
+                      }`} />
+                    </button>
+                    <span className={`text-sm font-medium ${messagingPrivacy === 'favorites' ? 'text-primary' : 'text-foreground-muted'}`}>
+                      Favorites Only
                     </span>
                   </div>
                 </div>
