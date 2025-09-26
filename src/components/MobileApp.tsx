@@ -391,7 +391,7 @@ function MobileApp() {
               <div className="glass-effect rounded-2xl p-6 shadow-xl">
                 <h2 className="text-xl font-bold text-foreground mb-6">Quick Settings</h2>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 glass-effect rounded-xl hover:bg-accent transition-all duration-200 cursor-pointer card-hover">
+                  <div onClick={() => setActiveTab('profile')} className="flex items-center justify-between p-4 glass-effect rounded-xl hover:bg-accent transition-all duration-200 cursor-pointer card-hover">
                     <div className="flex items-center space-x-4">
                       <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
                         <User className="w-5 h-5 text-white" />
