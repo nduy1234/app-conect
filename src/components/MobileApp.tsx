@@ -668,6 +668,21 @@ function MobileApp() {
                     </span>
                   </div>
                 </div>
+
+                {/* Account Management Section */}
+                <div className="glass-effect rounded-xl p-4">
+                  <h3 className="font-semibold text-foreground mb-1">Account Management</h3>
+                  <p className="text-sm text-foreground-secondary mb-4">Options to deactivate or delete your account</p>
+                  
+                  <div className="space-y-3">
+                    <button className="w-full p-3 border border-warning text-warning rounded-xl hover:bg-warning/10 transition-all duration-200 font-medium">
+                      Deactivate Account
+                    </button>
+                    <button className="w-full p-3 border border-destructive text-destructive rounded-xl hover:bg-destructive/10 transition-all duration-200 font-medium">
+                      Delete Account
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
