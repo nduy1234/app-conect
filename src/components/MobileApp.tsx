@@ -419,29 +419,7 @@ function MobileApp() {
               </div>
 
               {/* Recent Activity */}
-              <div className="glass-effect rounded-2xl p-6 shadow-xl">
-                <h2 className="text-xl font-bold text-foreground mb-6">Recent Activity</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4 p-4 bg-info/10 rounded-xl">
-                    <div className="w-10 h-10 bg-gradient-info rounded-xl flex items-center justify-center shadow-info">
-                      <Activity className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-foreground">Completed onboarding</p>
-                      <p className="text-foreground-secondary text-sm">2 hours ago</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4 p-4 bg-success/10 rounded-xl">
-                    <div className="w-10 h-10 bg-gradient-success rounded-xl flex items-center justify-center shadow-success">
-                      <Calendar className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-foreground">Scheduled meeting</p>
-                      <p className="text-foreground-secondary text-sm">Yesterday</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
             </div>}
 
           {activeTab === 'profile' && <div className="p-6 space-y-6">
