@@ -41,6 +41,8 @@ function MobileApp() {
     goals: '',
     favoriteStartup: ''
   });
+  const [showPrivacySettings, setShowPrivacySettings] = useState(false);
+  const [profileVisibility, setProfileVisibility] = useState<'public' | 'private'>('public');
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -399,7 +401,7 @@ function MobileApp() {
                       <span className="font-semibold text-foreground">Edit Profile</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-4 glass-effect rounded-xl hover:bg-accent transition-all duration-200 cursor-pointer card-hover">
+                  <div onClick={() => setShowPrivacySettings(true)} className="flex items-center justify-between p-4 glass-effect rounded-xl hover:bg-accent transition-all duration-200 cursor-pointer card-hover">
                     <div className="flex items-center space-x-4">
                       <div className="w-10 h-10 bg-gradient-success rounded-xl flex items-center justify-center shadow-success">
                         <Lock className="w-5 h-5 text-white" />
@@ -592,6 +594,54 @@ function MobileApp() {
               </div>
             </div>}
         </div>
+
+        {/* Privacy Settings Modal */}
+        {showPrivacySettings && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+            <div className="w-full max-w-md glass-effect rounded-2xl p-6 shadow-xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-foreground">Privacy Settings</h2>
+                <button 
+                  onClick={() => setShowPrivacySettings(false)}
+                  className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-accent transition-colors"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="flex items-center justify-between p-4 glass-effect rounded-xl">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-foreground mb-1">Profile Visibility</h3>
+                    <p className="text-sm text-foreground-secondary">Who can see your profile</p>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span className={`text-sm font-medium ${profileVisibility === 'public' ? 'text-primary' : 'text-foreground-muted'}`}>
+                      Public
+                    </span>
+                    <button
+                      onClick={() => setProfileVisibility(profileVisibility === 'public' ? 'private' : 'public')}
+                      className={`w-12 h-6 rounded-full transition-all duration-200 ${
+                        profileVisibility === 'public' 
+                          ? 'bg-primary shadow-glow' 
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-200 ${
+                        profileVisibility === 'public' 
+                          ? 'translate-x-6' 
+                          : 'translate-x-0.5'
+                      }`} />
+                    </button>
+                    <span className={`text-sm font-medium ${profileVisibility === 'private' ? 'text-primary' : 'text-foreground-muted'}`}>
+                      Private
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Bottom Navigation */}
         <div className="fixed bottom-0 left-0 right-0 glass-effect border-t border-border px-6 py-4 shadow-xl">
