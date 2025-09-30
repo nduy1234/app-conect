@@ -18,9 +18,9 @@
     --secondary-dark: 263 85% 65%;   /* Purple-600 */
     
     /* App Background & Surfaces */
-    --background: 220 26% 97%;      /* Slate-50 with blue tint */
-    --background-secondary: 213 31% 91%;  /* Blue-100 */
-    --background-tertiary: 242 47% 94%;   /* Indigo-100 */
+    --background: 0 0% 100%;      /* Pure white */
+    --background-secondary: 0 0% 100%;  /* Pure white */
+    --background-tertiary: 0 0% 100%;   /* Pure white */
     
     --surface: 0 0% 100%;
     --surface-glass: 0 0% 100% / 0.8;    /* Glassmorphism */
@@ -74,7 +74,7 @@
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(142 76% 36%));
     --gradient-warning: linear-gradient(135deg, hsl(var(--warning)), hsl(var(--warning-light)));
     --gradient-info: linear-gradient(135deg, hsl(var(--info)), hsl(var(--info-light)));
-    --gradient-background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--background-secondary)), hsl(var(--background-tertiary)));
+    --gradient-background: hsl(0 0% 100%);
     --gradient-surface: linear-gradient(145deg, hsl(220 26% 97%), hsl(213 31% 91%), hsl(242 47% 94%));
     
     /* Shadows */
