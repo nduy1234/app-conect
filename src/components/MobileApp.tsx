@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Home, User, BookOpen, MessageCircle, TrendingUp, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload } from 'lucide-react';
+import { Home, User, BookOpen, MessageCircle, TrendingUp, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 interface UserData {
   name: string;
   firstName: string;
@@ -47,8 +48,26 @@ function MobileApp() {
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [messageNotifications, setMessageNotifications] = useState(true);
   const [favoritesNotifications, setFavoritesNotifications] = useState(true);
+  const [messageSearchQuery, setMessageSearchQuery] = useState('');
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+
+  // Sample conversation data
+  const conversations = [
+    { id: 1, name: 'Sarah Chen', startupName: 'TechFlow AI', lastMessage: 'Looking forward to our collaboration!', time: '2m ago', avatar: 'SC' },
+    { id: 2, name: 'Michael Rodriguez', startupName: 'FinWave', lastMessage: 'Thanks for the intro, let\'s connect', time: '15m ago', avatar: 'MR' },
+    { id: 3, name: 'Emily Watson', startupName: 'GreenTech Solutions', lastMessage: 'I love your approach to sustainability', time: '1h ago', avatar: 'EW' },
+    { id: 4, name: 'David Kim', startupName: 'HealthHub', lastMessage: 'Would love to discuss potential partnership', time: '3h ago', avatar: 'DK' },
+    { id: 5, name: 'Jessica Lee', startupName: 'EduConnect', lastMessage: 'Great meeting you at the conference!', time: '1d ago', avatar: 'JL' },
+  ];
+
+  // Filter conversations based on search query
+  const filteredConversations = conversations.filter(conv => 
+    messageSearchQuery === '' || 
+    conv.name.toLowerCase().includes(messageSearchQuery.toLowerCase()) ||
+    conv.startupName.toLowerCase().includes(messageSearchQuery.toLowerCase()) ||
+    conv.lastMessage.toLowerCase().includes(messageSearchQuery.toLowerCase())
+  );
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -575,14 +594,58 @@ function MobileApp() {
             </div>}
 
           {activeTab === 'message' && <div className="p-6">
-              <div className="glass-effect rounded-2xl p-8 shadow-xl text-center">
-                <div className="w-16 h-16 bg-gradient-info rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-info">
-                  <MessageCircle className="w-8 h-8 text-white" />
+              <div className="glass-effect rounded-2xl p-6 shadow-xl">
+                {/* Search Bar */}
+                <div className="relative mb-6">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted w-5 h-5" />
+                  <Input
+                    type="text"
+                    placeholder="Search messages or users..."
+                    value={messageSearchQuery}
+                    onChange={(e) => setMessageSearchQuery(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-background/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+                  />
                 </div>
-                <h2 className="text-2xl font-bold text-info mb-4">
-                  Messages
-                </h2>
-                <p className="text-foreground-secondary">Connect with your community</p>
+
+                {/* Conversation List */}
+                <div className="space-y-3">
+                  {filteredConversations.length > 0 ? (
+                    filteredConversations.map((conv) => (
+                      <div 
+                        key={conv.id}
+                        className="p-4 bg-background/50 hover:bg-accent border border-border rounded-xl transition-all duration-200 cursor-pointer group"
+                      >
+                        <div className="flex items-start space-x-4">
+                          <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center flex-shrink-0 shadow-md">
+                            <span className="text-white font-semibold text-sm">{conv.avatar}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1">
+                              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                                {conv.name}
+                              </h3>
+                              <span className="text-xs text-foreground-muted flex-shrink-0 ml-2">
+                                {conv.time}
+                              </span>
+                            </div>
+                            <p className="text-sm text-info font-medium mb-1 truncate">
+                              {conv.startupName}
+                            </p>
+                            <p className="text-sm text-foreground-secondary truncate">
+                              {conv.lastMessage}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <MessageCircle className="w-12 h-12 text-foreground-muted mx-auto mb-3" />
+                      <p className="text-foreground-secondary">No messages found</p>
+                      <p className="text-sm text-foreground-muted mt-1">Try a different search term</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>}
 
