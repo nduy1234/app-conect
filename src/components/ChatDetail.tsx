@@ -6,7 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, format, isToday, isYesterday, isSameDay } from 'date-fns';
 
 interface ChatDetailProps {
   partnerId: string;
@@ -128,6 +128,22 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
     }
   };
 
+  const formatDateSeparator = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      if (isToday(date)) return 'Today';
+      if (isYesterday(date)) return 'Yesterday';
+      return format(date, 'MMMM d, yyyy');
+    } catch {
+      return '';
+    }
+  };
+
+  const shouldShowDateSeparator = (currentMessage: Message, previousMessage: Message | null) => {
+    if (!previousMessage) return true;
+    return !isSameDay(new Date(currentMessage.created_at), new Date(previousMessage.created_at));
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
@@ -166,39 +182,50 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
           </div>
         ) : messages && messages.length > 0 ? (
           <>
-            {messages.map((message) => {
+            {messages.map((message, index) => {
               const isOwnMessage = message.sender_id === currentUserId;
+              const previousMessage = index > 0 ? messages[index - 1] : null;
+              const showDateSeparator = shouldShowDateSeparator(message, previousMessage);
+              
               return (
-                <div
-                  key={message.id}
-                  className={`flex items-end space-x-2 ${isOwnMessage ? 'flex-row-reverse space-x-reverse' : ''}`}
-                >
-                  {!isOwnMessage && (
-                    <Avatar className="h-8 w-8">
-                      {partnerProfile?.avatar_url && (
-                        <AvatarImage src={partnerProfile.avatar_url} alt={partnerName} />
-                      )}
-                      <AvatarFallback className="bg-gradient-primary text-white text-xs">
-                        {getInitials(partnerName)}
-                      </AvatarFallback>
-                    </Avatar>
-                  )}
-                  
-                  <div className={`max-w-[70%] ${isOwnMessage ? 'items-end' : 'items-start'} flex flex-col`}>
-                    <div
-                      className={`rounded-2xl px-4 py-2 ${
-                        isOwnMessage
-                          ? 'bg-gradient-primary text-white rounded-br-sm'
-                          : 'bg-surface-glass text-foreground rounded-bl-sm'
-                      }`}
-                    >
-                      <p className="text-sm">{message.content}</p>
+                <React.Fragment key={message.id}>
+                  {showDateSeparator && (
+                    <div className="flex justify-center my-4">
+                      <span className="px-3 py-1 bg-surface-glass text-foreground-muted text-xs rounded-full">
+                        {formatDateSeparator(message.created_at)}
+                      </span>
                     </div>
-                    <span className="text-xs text-foreground-muted mt-1 px-2">
-                      {formatTime(message.created_at)}
-                    </span>
+                  )}
+                  <div
+                    className={`flex items-end space-x-2 ${isOwnMessage ? 'flex-row-reverse space-x-reverse' : ''}`}
+                  >
+                    {!isOwnMessage && (
+                      <Avatar className="h-8 w-8">
+                        {partnerProfile?.avatar_url && (
+                          <AvatarImage src={partnerProfile.avatar_url} alt={partnerName} />
+                        )}
+                        <AvatarFallback className="bg-gradient-primary text-white text-xs">
+                          {getInitials(partnerName)}
+                        </AvatarFallback>
+                      </Avatar>
+                    )}
+                    
+                    <div className={`max-w-[70%] ${isOwnMessage ? 'items-end' : 'items-start'} flex flex-col`}>
+                      <div
+                        className={`rounded-2xl px-4 py-2 ${
+                          isOwnMessage
+                            ? 'bg-gradient-primary text-white rounded-br-sm'
+                            : 'bg-surface-glass text-foreground rounded-bl-sm'
+                        }`}
+                      >
+                        <p className="text-sm">{message.content}</p>
+                      </div>
+                      <span className="text-xs text-foreground-muted mt-1 px-2">
+                        {formatTime(message.created_at)}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </React.Fragment>
               );
             })}
             <div ref={messagesEndRef} />
