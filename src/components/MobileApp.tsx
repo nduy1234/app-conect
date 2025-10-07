@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Home, User, BookOpen, MessageCircle, TrendingUp, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { ConversationList } from './ConversationList';
+import { ChatDetail } from './ChatDetail';
 interface UserData {
   name: string;
   firstName: string;
@@ -49,6 +51,8 @@ function MobileApp() {
   const [messageNotifications, setMessageNotifications] = useState(true);
   const [favoritesNotifications, setFavoritesNotifications] = useState(true);
   const [messageSearchQuery, setMessageSearchQuery] = useState('');
+  const [selectedChatUserId, setSelectedChatUserId] = useState<string | null>(null);
+  const [selectedChatUserName, setSelectedChatUserName] = useState<string>('');
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -593,61 +597,43 @@ function MobileApp() {
               </div>
             </div>}
 
-          {activeTab === 'message' && <div className="p-6">
-              <div className="glass-effect rounded-2xl p-6 shadow-xl">
-                {/* Search Bar */}
-                <div className="relative mb-6">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted w-5 h-5" />
-                  <Input
-                    type="text"
-                    placeholder="Search messages or users..."
-                    value={messageSearchQuery}
-                    onChange={(e) => setMessageSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-background/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+          {activeTab === 'message' && (
+            selectedChatUserId ? (
+              <ChatDetail
+                partnerId={selectedChatUserId}
+                partnerName={selectedChatUserName}
+                onBack={() => {
+                  setSelectedChatUserId(null);
+                  setSelectedChatUserName('');
+                }}
+              />
+            ) : (
+              <div className="p-6">
+                <div className="glass-effect rounded-2xl p-6 shadow-xl">
+                  {/* Search Bar */}
+                  <div className="relative mb-6">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted w-5 h-5" />
+                    <Input
+                      type="text"
+                      placeholder="Search messages or users..."
+                      value={messageSearchQuery}
+                      onChange={(e) => setMessageSearchQuery(e.target.value)}
+                      className="w-full pl-12 pr-4 py-3 bg-background/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+                    />
+                  </div>
+
+                  {/* Conversation List */}
+                  <ConversationList
+                    searchQuery={messageSearchQuery}
+                    onSelectConversation={(userId, userName) => {
+                      setSelectedChatUserId(userId);
+                      setSelectedChatUserName(userName);
+                    }}
                   />
                 </div>
-
-                {/* Conversation List */}
-                <div className="space-y-3">
-                  {filteredConversations.length > 0 ? (
-                    filteredConversations.map((conv) => (
-                      <div 
-                        key={conv.id}
-                        className="p-4 bg-background/50 hover:bg-accent border border-border rounded-xl transition-all duration-200 cursor-pointer group"
-                      >
-                        <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center flex-shrink-0 shadow-md">
-                            <span className="text-white font-semibold text-sm">{conv.avatar}</span>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
-                                {conv.name}
-                              </h3>
-                              <span className="text-xs text-foreground-muted flex-shrink-0 ml-2">
-                                {conv.time}
-                              </span>
-                            </div>
-                            <p className="text-sm text-info font-medium mb-1 truncate">
-                              {conv.startupName}
-                            </p>
-                            <p className="text-sm text-foreground-secondary truncate">
-                              {conv.lastMessage}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8">
-                      <MessageCircle className="w-12 h-12 text-foreground-muted mx-auto mb-3" />
-                      <p className="text-foreground-secondary">No messages found</p>
-                      <p className="text-sm text-foreground-muted mt-1">Try a different search term</p>
-                    </div>
-                  )}
-                </div>
               </div>
-            </div>}
+            )
+          )}
 
           {activeTab === 'startups' && <div className="p-6">
               <div className="glass-effect rounded-2xl p-8 shadow-xl text-center">
