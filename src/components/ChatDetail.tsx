@@ -7,6 +7,15 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistanceToNow, format, isToday, isYesterday, isSameDay } from 'date-fns';
+import { z } from 'zod';
+import { toast } from 'sonner';
+
+const messageSchema = z.object({
+  content: z.string()
+    .trim()
+    .min(1, { message: "Message cannot be empty" })
+    .max(2000, { message: "Message must be less than 2000 characters" })
+});
 
 interface ChatDetailProps {
   partnerId: string;
@@ -106,8 +115,14 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage.trim()) {
-      sendMessageMutation.mutate(newMessage);
+    
+    try {
+      const validatedMessage = messageSchema.parse({ content: newMessage });
+      sendMessageMutation.mutate(validatedMessage.content);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      }
     }
   };
 
