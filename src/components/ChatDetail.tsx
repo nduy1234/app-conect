@@ -102,6 +102,39 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
 
       if (error) throw error;
     },
+    onMutate: async (content: string) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['messages', partnerId] });
+
+      // Snapshot the previous value
+      const previousMessages = queryClient.getQueryData<Message[]>(['messages', partnerId]);
+
+      // Optimistically update with the new message
+      if (currentUserId) {
+        const optimisticMessage: Message = {
+          id: `temp-${Date.now()}`,
+          sender_id: currentUserId,
+          receiver_id: partnerId,
+          content,
+          created_at: new Date().toISOString(),
+          is_read: false,
+        };
+
+        queryClient.setQueryData<Message[]>(
+          ['messages', partnerId],
+          (old) => [...(old || []), optimisticMessage]
+        );
+      }
+
+      return { previousMessages };
+    },
+    onError: (err, newMessage, context) => {
+      // Rollback on error
+      if (context?.previousMessages) {
+        queryClient.setQueryData(['messages', partnerId], context.previousMessages);
+      }
+      toast.error('Failed to send message. Please try again.');
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['messages', partnerId] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
