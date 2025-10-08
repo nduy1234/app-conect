@@ -115,7 +115,55 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
     );
   }
 
-  if (!conversations || conversations.length === 0) {
+  // Sample conversations for demonstration
+  const sampleConversations: Conversation[] = [
+    {
+      user_id: 'sample-1',
+      display_name: 'TechVenture AI',
+      avatar_url: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=100&h=100&fit=crop',
+      last_message: 'We would love to discuss your investment proposal further.',
+      last_message_time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      is_read: false,
+    },
+    {
+      user_id: 'sample-2',
+      display_name: 'Sarah Chen',
+      avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      last_message: 'Thanks for connecting! Looking forward to our meeting next week.',
+      last_message_time: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      is_read: true,
+    },
+    {
+      user_id: 'sample-3',
+      display_name: 'GreenTech Solutions',
+      avatar_url: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=100&h=100&fit=crop',
+      last_message: 'Our sustainability metrics have improved by 40% this quarter.',
+      last_message_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      is_read: true,
+    },
+    {
+      user_id: 'sample-4',
+      display_name: 'Michael Rodriguez',
+      avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      last_message: 'Can we schedule a call to discuss the partnership opportunity?',
+      last_message_time: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      is_read: true,
+    },
+    {
+      user_id: 'sample-5',
+      display_name: 'HealthFirst',
+      avatar_url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=100&h=100&fit=crop',
+      last_message: 'Great progress on the Q4 goals! Keep up the excellent work.',
+      last_message_time: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      is_read: true,
+    },
+  ];
+
+  const displayConversations = (!conversations || conversations.length === 0) && !searchQuery
+    ? sampleConversations
+    : conversations;
+
+  if (!displayConversations || displayConversations.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-foreground-secondary">
@@ -127,7 +175,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
 
   return (
     <div className="space-y-2">
-      {conversations.map((conv) => (
+      {displayConversations.map((conv) => (
         <div
           key={conv.user_id}
           onClick={() => onSelectConversation(conv.user_id, conv.display_name)}
