@@ -37,6 +37,8 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const isDemo = !z.string().uuid().safeParse(partnerId).success;
+  const [demoMessages, setDemoMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -70,6 +72,7 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
 
       return data as Message[];
     },
+    enabled: !isDemo,
   });
 
   const { data: partnerProfile } = useQuery({
@@ -84,10 +87,15 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
       if (error) throw error;
       return data;
     },
+    enabled: !isDemo,
   });
 
   const sendMessageMutation = useMutation({
     mutationFn: async (content: string) => {
+      if (isDemo) {
+        // Demo conversations: do not hit the database
+        return;
+      }
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
@@ -103,6 +111,20 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
       if (error) throw error;
     },
     onMutate: async (content: string) => {
+      if (isDemo) {
+        // Optimistically add to local demo state
+        const optimisticMessage: Message = {
+          id: `temp-${Date.now()}`,
+          sender_id: 'me',
+          receiver_id: partnerId,
+          content,
+          created_at: new Date().toISOString(),
+          is_read: true,
+        };
+        setDemoMessages((prev) => [...prev, optimisticMessage]);
+        return { previousMessages: null };
+      }
+
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['messages', partnerId] });
 
@@ -129,22 +151,33 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
       return { previousMessages };
     },
     onError: (err, newMessage, context) => {
-      // Rollback on error
+      // Rollback on error for non-demo
       if (context?.previousMessages) {
         queryClient.setQueryData(['messages', partnerId], context.previousMessages);
+      }
+      const errMsg = (err as any)?.message || '';
+      if (/invalid input syntax for type uuid/i.test(errMsg)) {
+        toast.info("This is a demo conversation. Messages aren't saved.");
+        return;
       }
       toast.error('Failed to send message. Please try again.');
     },
     onSuccess: () => {
+      if (isDemo) {
+        setNewMessage('');
+        return;
+      }
       queryClient.invalidateQueries({ queryKey: ['messages', partnerId] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
       setNewMessage('');
     },
   });
+  const displayedMessages = (isDemo ? demoMessages : messages) || [];
+  const loading = isDemo ? false : isLoading;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [displayedMessages]);
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,7 +252,7 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {isLoading ? (
+        {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex items-start space-x-2">
@@ -228,11 +261,11 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
               </div>
             ))}
           </div>
-        ) : messages && messages.length > 0 ? (
+        ) : displayedMessages.length > 0 ? (
           <>
-            {messages.map((message, index) => {
-              const isOwnMessage = message.sender_id === currentUserId;
-              const previousMessage = index > 0 ? messages[index - 1] : null;
+            {displayedMessages.map((message, index) => {
+              const isOwnMessage = isDemo ? message.sender_id === 'me' : message.sender_id === currentUserId;
+              const previousMessage = index > 0 ? displayedMessages[index - 1] : null;
               const showDateSeparator = shouldShowDateSeparator(message, previousMessage);
               
               return (
