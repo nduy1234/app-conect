@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistanceToNow } from 'date-fns';
 import avatarMan from '@/assets/avatar-man.jpg';
 import avatarJonWen from '@/assets/avatar-jon-wen.jpg';
+import avatarJaneSmith from '@/assets/avatar-jane-smith.jpg';
 
 interface ConversationListProps {
   searchQuery: string;
@@ -129,8 +130,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
     },
     {
       user_id: 'sample-2',
-      display_name: 'Sarah Chen',
-      avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+      display_name: 'Jane Smith',
+      avatar_url: avatarJaneSmith,
       last_message: 'Thanks for connecting! Looking forward to our meeting next week.',
       last_message_time: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
       is_read: true,
