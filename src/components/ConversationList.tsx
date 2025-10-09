@@ -7,6 +7,7 @@ import { formatDistanceToNow } from 'date-fns';
 import avatarMan from '@/assets/avatar-man.jpg';
 import avatarJonWen from '@/assets/avatar-jon-wen.jpg';
 import avatarJaneSmith from '@/assets/avatar-jane-smith.jpg';
+import avatarWoman3 from '@/assets/avatar-woman-3.jpg';
 
 interface ConversationListProps {
   searchQuery: string;
@@ -139,7 +140,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
     {
       user_id: 'sample-3',
       display_name: 'GreenTech Solutions',
-      avatar_url: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=100&h=100&fit=crop',
+      avatar_url: avatarWoman3,
       last_message: 'Our sustainability metrics have improved by 40% this quarter.',
       last_message_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
       is_read: true,
