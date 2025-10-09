@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistanceToNow } from 'date-fns';
+import avatarMan from '@/assets/avatar-man.jpg';
 
 interface ConversationListProps {
   searchQuery: string;
@@ -144,7 +145,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
     {
       user_id: 'sample-4',
       display_name: 'Michael Rodriguez',
-      avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      avatar_url: avatarMan,
       last_message: 'Can we schedule a call to discuss the partnership opportunity?',
       last_message_time: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       is_read: true,
