@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Home, User, BookOpen, MessageCircle, TrendingUp, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload, Search } from 'lucide-react';
+import { Home, User, BookOpen, MessageCircle, TrendingUp, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload, Search, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { ConversationList } from './ConversationList';
 import { ChatDetail } from './ChatDetail';
+import { NewMessageDialog } from './NewMessageDialog';
 interface UserData {
   name: string;
   firstName: string;
@@ -53,6 +55,7 @@ function MobileApp() {
   const [messageSearchQuery, setMessageSearchQuery] = useState('');
   const [selectedChatUserId, setSelectedChatUserId] = useState<string | null>(null);
   const [selectedChatUserName, setSelectedChatUserName] = useState<string>('');
+  const [showNewMessageDialog, setShowNewMessageDialog] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -610,6 +613,19 @@ function MobileApp() {
             ) : (
               <div className="p-6">
                 <div className="glass-effect rounded-2xl p-6 shadow-xl">
+                  {/* Header with New Message Button */}
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-foreground">Messages</h2>
+                    <Button
+                      onClick={() => setShowNewMessageDialog(true)}
+                      size="sm"
+                      className="gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      New Message
+                    </Button>
+                  </div>
+
                   {/* Search Bar */}
                   <div className="relative mb-6">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted w-5 h-5" />
@@ -834,6 +850,17 @@ function MobileApp() {
               </button>)}
           </div>
         </div>
+
+        {/* New Message Dialog */}
+        <NewMessageDialog
+          open={showNewMessageDialog}
+          onOpenChange={setShowNewMessageDialog}
+          onSelectUser={(userId, userName) => {
+            setSelectedChatUserId(userId);
+            setSelectedChatUserName(userName);
+            setActiveTab('message');
+          }}
+        />
       </div>
     </div>;
 }
