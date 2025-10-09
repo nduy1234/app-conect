@@ -153,14 +153,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
       last_message_time: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       is_read: true,
     },
-    {
-      user_id: 'sample-5',
-      display_name: 'HealthFirst',
-      avatar_url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=100&h=100&fit=crop',
-      last_message: 'Great progress on the Q4 goals! Keep up the excellent work.',
-      last_message_time: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-      is_read: true,
-    },
   ];
 
   const displayConversations = (!conversations || conversations.length === 0) && !searchQuery
