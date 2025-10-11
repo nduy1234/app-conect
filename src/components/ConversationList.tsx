@@ -155,9 +155,18 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
     },
   ];
 
-  const displayConversations = (!conversations || conversations.length === 0) && !searchQuery
+  // Use sample conversations if no real data exists
+  const baseConversations = (!conversations || conversations.length === 0)
     ? sampleConversations
     : conversations;
+
+  // Apply search filter to the conversations being displayed
+  const displayConversations = searchQuery
+    ? baseConversations.filter(conv =>
+        conv.display_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        conv.last_message.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : baseConversations;
 
   if (!displayConversations || displayConversations.length === 0) {
     return (
