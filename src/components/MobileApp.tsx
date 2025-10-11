@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Home, User, BookOpen, MessageCircle, TrendingUp, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload, Search, Plus } from 'lucide-react';
+import { Home, User, BookOpen, MessageCircle, Briefcase, Bell, Settings, Eye, EyeOff, Mail, Lock, ArrowLeft, Check, Loader2, Users, Calendar, Activity, Rocket, Camera, Video, Upload, Search, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ConversationList } from './ConversationList';
@@ -654,7 +654,7 @@ function MobileApp() {
           {activeTab === 'startups' && <div className="p-6">
               <div className="glass-effect rounded-2xl p-8 shadow-xl text-center">
                 <div className="w-16 h-16 bg-gradient-to-r from-secondary to-secondary-dark rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-secondary/30">
-                  <TrendingUp className="w-8 h-8 text-white" />
+                  <Briefcase className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-secondary mb-4">
                   Startups
@@ -838,7 +838,7 @@ function MobileApp() {
             label: 'Message'
           }, {
             id: 'startups' as Tab,
-            icon: TrendingUp,
+            icon: Briefcase,
             label: 'Startups'
           }].map(({
             id,
