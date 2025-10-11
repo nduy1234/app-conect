@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ConversationList } from './ConversationList';
 import { ChatDetail } from './ChatDetail';
-import { NewMessageDialog } from './NewMessageDialog';
+import { ComposeMessageDialog } from './ComposeMessageDialog';
 interface UserData {
   name: string;
   firstName: string;
@@ -851,15 +851,10 @@ function MobileApp() {
           </div>
         </div>
 
-        {/* New Message Dialog */}
-        <NewMessageDialog
+        {/* Compose Message Dialog */}
+        <ComposeMessageDialog
           open={showNewMessageDialog}
           onOpenChange={setShowNewMessageDialog}
-          onSelectUser={(userId, userName) => {
-            setSelectedChatUserId(userId);
-            setSelectedChatUserName(userName);
-            setActiveTab('message');
-          }}
         />
       </div>
     </div>;
