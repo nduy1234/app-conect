@@ -139,7 +139,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ searchQuery,
     },
     {
       user_id: 'sample-3',
-      display_name: 'GreenTech Solutions',
+      display_name: 'Lan Ina',
       avatar_url: avatarWoman3,
       last_message: 'Our sustainability metrics have improved by 40% this quarter.',
       last_message_time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
