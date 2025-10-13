@@ -159,8 +159,8 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command>
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                      <Command shouldFilter={false}>
                         <CommandInput 
                           placeholder="Search users..." 
                           value={searchQuery}
