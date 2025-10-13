@@ -49,8 +49,6 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
   const sampleUsers = [
     { user_id: 'sample-1', display_name: 'Jon Wen', avatar_url: '/src/assets/avatar-jon-wen.jpg' },
     { user_id: 'sample-2', display_name: 'Jane Smith', avatar_url: '/src/assets/avatar-jane-smith.jpg' },
-    { user_id: 'sample-3', display_name: 'Mike Johnson', avatar_url: '/src/assets/avatar-man.jpg' },
-    { user_id: 'sample-4', display_name: 'Sarah Williams', avatar_url: '/src/assets/avatar-woman-3.jpg' },
     { user_id: 'sample-5', display_name: 'Lan Ina', avatar_url: '/src/assets/avatar-woman-3.jpg' },
     { user_id: 'sample-6', display_name: 'Michael Rodriguez', avatar_url: '/src/assets/avatar-man.jpg' },
   ];
