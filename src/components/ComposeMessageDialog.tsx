@@ -45,8 +45,16 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
     },
   });
 
+  // Sample users for testing when database is empty
+  const sampleUsers = [
+    { user_id: 'sample-1', display_name: 'Jon Wen', avatar_url: '/src/assets/avatar-jon-wen.jpg' },
+    { user_id: 'sample-2', display_name: 'Jane Smith', avatar_url: '/src/assets/avatar-jane-smith.jpg' },
+    { user_id: 'sample-3', display_name: 'Mike Johnson', avatar_url: '/src/assets/avatar-man.jpg' },
+    { user_id: 'sample-4', display_name: 'Sarah Williams', avatar_url: '/src/assets/avatar-woman-3.jpg' },
+  ];
+
   // Fetch user profiles for autocomplete
-  const { data: profiles = [] } = useQuery({
+  const { data: dbProfiles = [] } = useQuery({
     queryKey: ['profiles', searchQuery],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -67,6 +75,22 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
     },
     enabled: open,
   });
+
+  // Use sample users if database is empty, otherwise use real profiles
+  const profiles = React.useMemo(() => {
+    if (dbProfiles.length > 0) {
+      return dbProfiles;
+    }
+    
+    // Filter sample users by search query
+    if (searchQuery) {
+      return sampleUsers.filter(user => 
+        user.display_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    return sampleUsers;
+  }, [dbProfiles, searchQuery]);
 
   const onSubmit = async (values: MessageFormValues) => {
     setIsSubmitting(true);
