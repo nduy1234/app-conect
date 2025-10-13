@@ -9,7 +9,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { Send } from 'lucide-react';
+import { Send, Check } from 'lucide-react';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useQuery } from '@tanstack/react-query';
 
 interface ComposeMessageDialogProps {
   open: boolean;
@@ -30,6 +33,8 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
 }) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [popoverOpen, setPopoverOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const form = useForm<MessageFormValues>({
     resolver: zodResolver(messageSchema),
@@ -38,6 +43,29 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
       subject: '',
       message: '',
     },
+  });
+
+  // Fetch user profiles for autocomplete
+  const { data: profiles = [] } = useQuery({
+    queryKey: ['profiles', searchQuery],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return [];
+
+      let query = supabase
+        .from('profiles')
+        .select('user_id, display_name, avatar_url')
+        .neq('user_id', user.id)
+        .limit(10);
+
+      if (searchQuery) {
+        query = query.ilike('display_name', `%${searchQuery}%`);
+      }
+
+      const { data } = await query;
+      return data || [];
+    },
+    enabled: open,
   });
 
   const onSubmit = async (values: MessageFormValues) => {
@@ -116,14 +144,56 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
               control={form.control}
               name="to"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col">
                   <FormLabel>To</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Enter recipient name..." 
-                      {...field} 
-                    />
-                  </FormControl>
+                  <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={popoverOpen}
+                          className="justify-between font-normal"
+                        >
+                          {field.value || "Select recipient..."}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <Command>
+                        <CommandInput 
+                          placeholder="Search users..." 
+                          value={searchQuery}
+                          onValueChange={setSearchQuery}
+                        />
+                        <CommandList>
+                          <CommandEmpty>No users found.</CommandEmpty>
+                          <CommandGroup>
+                            {profiles.map((profile) => (
+                              <CommandItem
+                                key={profile.user_id}
+                                value={profile.display_name || ''}
+                                onSelect={() => {
+                                  form.setValue('to', profile.display_name || '');
+                                  setPopoverOpen(false);
+                                  setSearchQuery('');
+                                }}
+                              >
+                                <Check
+                                  className={`mr-2 h-4 w-4 ${
+                                    field.value === profile.display_name
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  }`}
+                                />
+                                {profile.display_name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}
