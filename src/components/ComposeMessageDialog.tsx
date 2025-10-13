@@ -95,6 +95,21 @@ export const ComposeMessageDialog: React.FC<ComposeMessageDialogProps> = ({
   const onSubmit = async (values: MessageFormValues) => {
     setIsSubmitting(true);
     try {
+      // Check if this is a sample user
+      const isSampleUser = sampleUsers.some(u => u.display_name === values.to);
+      
+      if (isSampleUser) {
+        // For demo purposes with sample users
+        toast({
+          title: 'Success',
+          description: `Message sent to ${values.to} (Demo mode - sign in to send real messages)`,
+        });
+        form.reset();
+        onOpenChange(false);
+        return;
+      }
+
+      // Real user flow
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
