@@ -38,7 +38,16 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
   const queryClient = useQueryClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const isDemo = !z.string().uuid().safeParse(partnerId).success;
-  const [demoMessages, setDemoMessages] = useState<Message[]>([]);
+  const [demoMessages, setDemoMessages] = useState<Message[]>([
+    {
+      id: 'demo-initial',
+      sender_id: partnerId,
+      receiver_id: 'me',
+      content: "It's great to learn more about your startup.",
+      created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      is_read: true,
+    }
+  ]);
 
   useEffect(() => {
     const getCurrentUser = async () => {
