@@ -173,12 +173,10 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
     },
     onSuccess: () => {
       if (isDemo) {
-        setNewMessage('');
         return;
       }
       queryClient.invalidateQueries({ queryKey: ['messages', partnerId] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
-      setNewMessage('');
     },
   });
   const displayedMessages = (isDemo ? demoMessages : messages) || [];
@@ -193,6 +191,7 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
     
     try {
       const validatedMessage = messageSchema.parse({ content: newMessage });
+      setNewMessage(''); // Clear immediately for better UX
       sendMessageMutation.mutate(validatedMessage.content);
     } catch (error) {
       if (error instanceof z.ZodError) {
