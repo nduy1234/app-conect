@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistanceToNow, format, isToday, isYesterday, isSameDay } from 'date-fns';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { useDemoMessages } from '@/hooks/useDemoMessages';
 
 const messageSchema = z.object({
   content: z.string()
@@ -38,7 +39,7 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
   const queryClient = useQueryClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const isDemo = !z.string().uuid().safeParse(partnerId).success;
-  const [demoMessages, setDemoMessages] = useState<Message[]>([
+  const seedDemoMessages: Message[] = [
     {
       id: 'demo-initial',
       sender_id: partnerId,
@@ -47,7 +48,9 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
       created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
       is_read: true,
     }
-  ]);
+  ];
+
+  const { demoMessages, addDemoMessage } = useDemoMessages(partnerId, seedDemoMessages as any);
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -130,7 +133,7 @@ export const ChatDetail: React.FC<ChatDetailProps> = ({ partnerId, partnerName, 
           created_at: new Date().toISOString(),
           is_read: true,
         };
-        setDemoMessages((prev) => [...prev, optimisticMessage]);
+        addDemoMessage(optimisticMessage);
         return { previousMessages: null };
       }
 
